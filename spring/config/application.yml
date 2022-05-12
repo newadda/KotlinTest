@@ -1,0 +1,70 @@
+### profile name
+spring:
+  profiles:
+    active: prod
+
+---
+spring:
+  config:
+    activate.on-profile: dev
+    import: optional:classpath:dev.yml
+
+
+---
+spring:
+  config:
+    activate.on-profile: prod
+  main.allow-bean-definition-overriding: true
+  main.banner-mode: off
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+server:
+  port: 9090
+
+
+
+# Built-in log
+logging:
+  config: ./config/log4j2.xml
+  level:
+    org.springframework.web.filter: debug
+
+
+
+database:
+  url: jdbc:postgresql://192.168.1.15:5432/xitech
+  driverClassName: org.postgresql.Driver
+  username: xitech
+  password: xitech
+
+
+
+dbcp:
+  hikari:
+    maximumPoolSize: 5
+    maxLifetime: 1800000
+    connectionTestQuery: select 1
+    connectionTimeout: 30000
+
+
+
+jpa:
+  hibernate.hbm2ddl.auto: none
+  hibernate.show_sql: false
+  hibernate.dialect: org.sewage.lib.hibernate.dialect.PostgreSQLExtendDialect
+  hibernate.jdbc.time_zone: Asia/Seoul
+  show_sql: false
+  format_sql: false
+  use_sql_commnets: true
+
+
+
+storage:
+  base_path: "D:/버릴것/storage/"
+
+quartz:
+  propertiesPath: ./config/quartz.properties
