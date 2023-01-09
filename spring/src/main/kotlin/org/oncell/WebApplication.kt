@@ -5,12 +5,10 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.boot.builder.SpringApplicationBuilder
-import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextClosedEvent
 import java.util.*
-
 
 
 @SpringBootApplication(scanBasePackages = [], exclude = [HibernateJpaAutoConfiguration::class])
@@ -41,21 +39,20 @@ fun main(args:Array<String>){
     //System.setProperty("spring.config.name", CONFIG_NAME);
     System.setProperty("file.encoding", "UTF-8")
 
-    // 디폴트 타임존 설정
 
-
-    // 디폴트 타임존 설정
-    TimeZone.setDefault(TimeZone.getTimeZone(WebApplication.TIME_ZONE))
-
-    // 디폴트 locale 설정
-
-    // 디폴트 locale 설정
-    Locale.setDefault(Locale("ko", "kr"))
 
     SpringApplication.run(WebApplication::class.java, *args)
     // 혹은
      //runApplication<WebApplication>( *args)
 
+}
 
+fun init(){
+
+    // 디폴트 타임존 설정
+    TimeZone.setDefault(TimeZone.getTimeZone(WebApplication.TIME_ZONE))
+
+    // 디폴트 locale 설정
+    Locale.setDefault(Locale("ko", "kr"))
 
 }

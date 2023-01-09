@@ -22,8 +22,8 @@ class ScopeFunction {
 
         var scopeTest = ScopeTest()
 
-        scopeTest.let{
-            it.a=2
+        val let = scopeTest.let {
+            it.a = 2
             // it.testPrivate() // 오류, private 함수라 컴파일 오류
             //it.b=4 // 오류, setter 는 private 라 컴파일 오류
             it.b
@@ -42,8 +42,11 @@ class ScopeFunction {
 
         }
 
+        scopeTest.apply {
+            //this.b=1 // this 로 접근하지만 private 라 컴파일 오류. 생각상에는 접근 가능해야 하는데 확장함수라 그런가봄.
+            this.a=1
 
-
+        }
 
     }
 }
