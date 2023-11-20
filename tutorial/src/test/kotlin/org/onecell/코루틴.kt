@@ -80,6 +80,7 @@ fun main(args:Array<String>){
     val async =GlobalScope.launch (coroutineExceptionHandler){
         try {
             block();
+
         }catch (e:Exception)
         {
             println(e)
@@ -95,5 +96,6 @@ fun main(args:Array<String>){
     runBlocking {
         delay(3000)
     }
+
 
 }
