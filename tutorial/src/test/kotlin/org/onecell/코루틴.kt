@@ -1,6 +1,5 @@
 package org.onecell
 
-import javafx.application.Application
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
 
@@ -55,32 +54,50 @@ fun main(args:Array<String>){
     val a= 코루틴()
    // a.test01()
 
+    /// ==========================================================
+    /// ============= 예외 핸들러 처리
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("CoroutineExceptionHandler got $exception")
+    }
 
-    val coroutineExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-        println(throwable)
-        throwable.printStackTrace()
+    /// launch 는 결과를 반환하지 않는다. 따라서 예외 핸들러가 동작한다.
+    val job = GlobalScope.launch(handler) { // root coroutine, running in GlobalScope
+        throw AssertionError()
+    }
+
+    /// async 는 결과를 반환한다. 즉, 예외 또한 반환하게 된다. 따라서 예외 핸들러는 동작하지 않는다.
+    val deferred = GlobalScope.async(handler) { // also root, but async instead of launch
+        throw ArithmeticException() // Nothing will be printed, relying on user to call deferred.await()
+    }
+
+    runBlocking {
+        /// deferred 의 경우 await()를 통해 결과를 반환한다. 결과는 예외도 포함한다.
+        try {
+            deferred.await()
+        }catch (e:Exception)
+        {
+            println("try-catch $e")
+        }
+        joinAll(job, deferred)
 
     }
 
-     GlobalScope.async  (coroutineExceptionHandler) {
-        println("start")
-        delay(1000)
-        println("end")
-        throw Exception("asdfasdfasdf")
-    }
 
+
+    /// ==========================================================
+    /// ============= 코루틴 cancel()
+    /// cancel() 여부는 delay() 함수나 isActive 를 통해 알 수 있다.
+    /// delay() 호출전이나 호출중에 cancel() 발생시 CancellationException() 이 발생한다.
     val block: suspend CoroutineScope.() -> Unit = {
         println("start")
         delay(1000)
         println("end")
         throw Exception("asdfasdfasdf")
-
     }
 
-    val async =GlobalScope.launch (coroutineExceptionHandler){
+    val async =GlobalScope.launch (handler){
         try {
             block();
-
         }catch (e:Exception)
         {
             println(e)
@@ -89,13 +106,32 @@ fun main(args:Array<String>){
 
         }
     }
-
-
     println("cancel")
     async.cancel(CancellationException("aaaa"))
+
+
+    /// isActive 확인
+    val async2 =GlobalScope.launch (
+        CoroutineExceptionHandler { _, exception ->
+            println("catce got $exception")
+        }
+    ){
+        println("start")
+        delay(1000)
+        println("isActive : $isActive") /// isActive :true 가 출력된다.
+        cancel(CancellationException("bbbbb"))
+
+        println("isActive : $isActive") /// isActive : false 가 출력된다.
+    }
+
+
+
+
     runBlocking {
+        async2.join()
         delay(3000)
     }
+
 
 
 }
