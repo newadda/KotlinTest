@@ -2,6 +2,7 @@ package org.onecell
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
+import kotlin.coroutines.CoroutineContext
 
 class 코루틴 {
 
@@ -53,6 +54,45 @@ fun CoroutineScope.produceNumbers() = produce<Int> {
 fun main(args:Array<String>){
     val a= 코루틴()
    // a.test01()
+
+    runBlocking{
+        launch(){
+
+            launch() {
+                delay(1000L) // non-blocking delay for 1 second (default time unit is ms)
+                println("heoool!") // print after delay
+            }
+            println("World!") // print after delay
+
+
+        }
+        println("heoool1!") // print after delay
+    }
+    println("heoool2!") // print after delay
+    val dis = newSingleThreadContext("1")
+
+   var  l =GlobalScope.async(dis) {
+        println("GlobalScope.async")
+        a.delayPrint(1000)
+
+        a.delayPrint(200,"test")
+
+        async() {
+            delay(2000)
+            println("done")
+        }
+
+        async() { println("done!!") }
+    }
+
+    println("runBlocking")
+    runBlocking (dis){
+        println("await")
+        l.await()
+        println("done!!!!!!!")
+    }
+
+
 
     /// ==========================================================
     /// ============= 예외 핸들러 처리

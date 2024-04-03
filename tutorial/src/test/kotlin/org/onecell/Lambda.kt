@@ -20,4 +20,8 @@ fun main()
         println("iter : $it")
     }
 
+    val testFun01:()->String ={"hello"}
+    val testFun02:(String)->String={it+"hello"}
+    val testFun03:(String)->String={str->str+"hello"}
+
 }

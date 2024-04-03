@@ -23,7 +23,7 @@ interface Instrument {
 //// java 의 static 구현
 class StTest{
     companion object {
-        @JvmStatic /// java 에서 static 으로 사용하기 위한 어노테이션
+       // @JvmStatic /// java 에서 static 으로 사용하기 위한 어노테이션
         var shape = "Rounded Rectangle"
 
         fun draw(){
@@ -67,7 +67,7 @@ fun main()
     }
 
     //// companion 키워드
-    val d=StTest::shape
-    println(d) // 출력Rounded Rectangle
+    //val d=StTest::shape
+    //println(d) // 출력Rounded Rectangle
 
 }
