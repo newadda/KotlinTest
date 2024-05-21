@@ -24,4 +24,7 @@ fun main()
     val testFun02:(String)->String={it+"hello"}
     val testFun03:(String)->String={str->str+"hello"}
 
+    val fun04 : String.()-> Int = {this.length}
+    "setset".fun04()
+
 }
